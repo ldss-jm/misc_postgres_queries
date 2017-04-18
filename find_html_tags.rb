@@ -32,8 +32,8 @@ end
 html_problems.sort_by! { |x| x.values }
 write_results('find_html_tags.results.txt',
               html_problems,
-              :tsv,
-              headers=['bnum', '_001', 'marc_tag', 'field_content']
+              headers=['bnum', '_001', 'marc_tag', 'field_content'],
+              'tsv'
 )
 
 # get a list of all "tags" in results

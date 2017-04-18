@@ -6,8 +6,8 @@ headers = ['bnum', 'cnum', 'problem_location', 'url']
 results = make_query('mono_bibs_unsupp_holdings_endeca_display_probs.sql')
 write_results(outfile,
               results,
-              :xlsx
               headers,
+              'xlsx'
 )
 
 
