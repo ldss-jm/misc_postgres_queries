@@ -38,10 +38,16 @@ c.results.each do |record|
 end
 
 html_problems.sort_by! { |x| x.values }
-c.write_results('find_html_tags.results.txt',
+#c.write_results('find_html_tags.results.txt',
+#              results: html_problems,
+#              headers: ['bnum', '_001', 'marc_tag', 'field_content'],
+#              format: 'tsv'
+#)
+outfile = 'YYYY-MM-DD_html_tags.xlsx'
+c.write_results(outfile,
               results: html_problems,
               headers: ['bnum', '_001', 'marc_tag', 'field_content'],
-              format: 'tsv'
+              format: 'xlsx'
 )
 
 # get a list of all things resembling tags in results
