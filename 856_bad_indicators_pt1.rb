@@ -1,10 +1,11 @@
-load '../postgres_connect/connect.rb'
+#!/usr/bin/env ruby
+require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
 
-c = Connect.new
+outdir = "#{__dir__}/output/"
+outfile = outdir + '856_bad_indicators_pt1.xlsx'
 
-outfile = '856_bad_indicators_pt1.xlsx'
+query = "#{__dir__}/query_file.sql"
+
 headers = ['bnum', 'bcode3', 'coll', 'marc_tag', 'ind1', 'ind2', 'link_type', 'field_content']
-c.make_query('856_bad_indicators_pt1.sql')
-c.write_results(outfile,
-              format: 'xlsx'
-)
+SierraDB.make_query(query)
+SierraDB.write_results(outfile, format: 'xlsx')

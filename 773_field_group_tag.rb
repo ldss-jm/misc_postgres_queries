@@ -1,6 +1,16 @@
-load '../postgres_connect/connect.rb'
+#!/usr/bin/env ruby
+require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
 
-c = Connect.new
+outdir = "#{__dir__}/output/"
+outfile = outdir + '773_field_group_tag.results.txt'
 
-c.make_query('773_field_group_tag.sql')
-c.write_results('773_field_group_tag.results.txt', format: 'tsv', include_headers: false)
+query = <<~SQL
+  select *
+  from sierra_view.varfield_view
+  where marc_tag = '773'
+    and record_type_code = 'b'
+    and varfield_type_code != 'w'
+SQL
+
+SierraDB.make_query(query)
+SierraDB.write_results(outfile, format: 'tsv', include_headers: false)

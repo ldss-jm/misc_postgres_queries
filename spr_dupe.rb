@@ -1,6 +1,8 @@
-require_relative '../postgres_connect/connect.rb'
+#!/usr/bin/env ruby
+require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
 
-c = Connect.new
+outdir = "#{__dir__}/output/"
+outfile = outdir + 'spr_data.txt'
 
 query = <<-SQL
 SELECT 'b' || rm.record_num || 'a' as bnum,
@@ -25,7 +27,8 @@ SELECT 'b' || rm.record_num || 'a' as bnum,
       and v.field_content ilike '%|tSpringer e-books (online collection)%'
 SQL
 
-c.make_query(query)
-c.write_results('spr_data.txt', format: 'tsv', include_headers: true)
+SierraDB.make_query(query)
+SierraDB.write_results(outfile, format: 'tsv', include_headers: true)
 
-load '../Cataloging_Scripts/springer_dedupe_on_urls.rb'
+Dir.chdir(outdir)
+load "../../Cataloging_Scripts/springer_dedupe_on_urls.rb"

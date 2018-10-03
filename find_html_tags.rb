@@ -1,5 +1,10 @@
-load '../postgres_connect/connect.rb'
+#!/usr/bin/env ruby
 require 'csv'
+require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+
+outdir = "#{__dir__}/output/"
+outfile = outdir + 'YYYY-MM-DD_html_tags.xlsx'
+
 
 def detect_html(content)
   if (
@@ -27,27 +32,34 @@ def detect_html(content)
   end
 end
 
-c = Connect.new
-c.make_query('find_html_tags.sql')
+query = <<~SQL
+  select 'b' || rm.record_num || 'a' as bnum, v001.field_content as _001, v.marc_tag, v.field_content
+  from sierra_view.varfield v
+  inner join sierra_view.bib_record b on b.id = v.record_id
+    and b.bcode3 not in ('d', 'c')
+  inner join sierra_view.record_metadata rm on rm.id = b.id
+  inner join sierra_view.varfield v001 on v001.record_id = b.id
+    and v001.marc_tag = '001'
+    and v001.field_content not ilike 'ss%'
+  where
+    v.field_content ~ '<[/a-zA-Z]'
+SQL
+
+SierraDB.make_query(query)
 html_problems = []
-c.results.each do |record|
+SierraDB.results.each do |record|
   content = record['field_content'].downcase
   if detect_html(content)
-   html_problems << record
+    html_problems << record
   end
 end
 
 html_problems.sort_by! { |x| x.values }
-#c.write_results('find_html_tags.results.txt',
-#              results: html_problems,
-#              headers: ['bnum', '_001', 'marc_tag', 'field_content'],
-#              format: 'tsv'
-#)
-outfile = 'YYYY-MM-DD_html_tags.xlsx'
-c.write_results(outfile,
-              results: html_problems,
-              headers: ['bnum', '_001', 'marc_tag', 'field_content'],
-              format: 'xlsx'
+SierraDB.write_results(
+  outfile,
+  results: html_problems,
+  headers: ['bnum', '_001', 'marc_tag', 'field_content'],
+  format: 'csv'
 )
 
 # get a list of all things resembling tags in results
