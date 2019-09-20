@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
-outfile = outdir + 'iolc_hathitrust.xlsx'
+outfile = outdir + 'iolc_hathitrust.csv'
 
 query = <<~SQL
   select distinct 'b' || rm.record_num || 'a' as bnum
@@ -12,12 +12,12 @@ query = <<~SQL
   where phe.index_tag || phe.index_entry ~ '^eiolc'
 SQL
 
-SierraDB.make_query(query)
+Sierra::DB.query(query)
 
 ht_oclc = File.read('hathi_oclcnums.txt').split("\n")
 results = []
-SierraDB.results.values.flatten.each do |bnum|
-  bib = SierraBib.new(bnum)
+Sierra::DB.results.values.flatten.each do |bnum|
+  bib = Sierra::Record.get(bnum)
   oclcnum = bib.oclcnum
   oclc_in_ht = ht_oclc.bsearch { |ht| oclcnum <=> ht } ? 'yes' : 'no'
   results << {
@@ -32,9 +32,9 @@ SierraDB.results.values.flatten.each do |bnum|
 end
 
 results.sort_by! { |b| b[:callno] }
-SierraDB.write_results(
+Sierra::DB.write_results(
   outfile,
   results: results,
-  format: 'xlsx',
+  format: 'csv',
   headers: ['callno', 'oclcnum', 'oclc_in_ht?', 'bnum']
 )

@@ -4,7 +4,7 @@ select 'b' || rm.record_num || 'a' as bnum, b.bcode3,
    where v.record_id = b.id
    and v.marc_tag = '773'
    and v.field_content like '%(online collection)%') as coll,
-v.marc_tag, v.marc_ind1, v.marc_ind2,
+v.marc_tag, v.marc_ind1 as ind1, v.marc_ind2 as ind2,
 case
 when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|uhttp'
    then 'html'
@@ -16,7 +16,7 @@ when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\
    then 'email'
 else null
 end as link_type,
-v.field_content as "m856"
+v.field_content as "field_content"
 
 from sierra_view.bib_record b
 inner join sierra_view.record_metadata rm on rm.id = b.id

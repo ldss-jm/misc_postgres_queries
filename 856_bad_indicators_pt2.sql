@@ -8,7 +8,7 @@ with recs as
    and v.field_content like '%(online collection)%') as coll,
 brp.best_title as title,
 --v.marc_tag,
-v.marc_ind1, v.marc_ind2,
+v.marc_ind1 as ind1, v.marc_ind2 as ind2,
 case
 when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|uhttp' or v.field_content ~ '\|u//'
    then 'html'
@@ -52,32 +52,32 @@ inner join sierra_view.varfield v on v.record_id = b.id
      ( v.marc_ind1 = '1' and replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|uftp') or
      ( v.marc_ind1 = '2' and replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|utelnet') or
      ( v.marc_ind1 = '4' and replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|u(http|//)') or -- //www.unc.edu is a working url
-			v.marc_ind1 not in ('0', '1', '2', '4') or 
+			v.marc_ind1 not in ('0', '1', '2', '4') or
        v.marc_ind2 not in ('0', '1', '2', '8') or
        v.marc_ind2 in ('1', '8') and exists (select * from sierra_view.varfield v where v.record_id = b.id and v.marc_tag = '773' and v.field_content ~ 'online collection')
 )
 where b.bcode3 not in ('d', 'n', 'c')
 and not exists (select * from sierra_view.varfield v where v.record_id = b.id and v.marc_tag = '040' and v.field_content ~* 'GPO|MvI')
-order by link_type, marc_ind1, coll, marc_ind2
+order by link_type, ind1, coll, ind2
 )
 
 select
 concat_ws('; ',
 case
-when marc_ind1 = ''
+when ind1 = ''
   then 'no ind1'
-when marc_ind1 not in ('0', '1', '2', '4')
+when ind1 not in ('0', '1', '2', '4')
   then 'weird ind1'
-when ((marc_ind1 = '0' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|umailto') or
-     ( marc_ind1 = '1' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|uftp') or
-     ( marc_ind1 = '2' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|utelnet') or
-     ( marc_ind1 = '4' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|u(http|//)')
+when ((ind1 = '0' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|umailto') or
+     ( ind1 = '1' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|uftp') or
+     ( ind1 = '2' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|utelnet') or
+     ( ind1 = '4' and replace(m856, 'http://libproxy.lib.unc.edu/login?url=', '') !~* '\|u(http|//)')
      and link_type is not null)
   then 'ind1-url mismatch'
 end,
 case
-when marc_ind2 not in ('0', '1', '2', '8') or
-     (marc_ind2 in ('1', '8') and coll is not null)
+when ind2 not in ('0', '1', '2', '8') or
+     (ind2 in ('1', '8') and coll is not null)
   then 'check ind2'
 end,
 case

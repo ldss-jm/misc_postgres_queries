@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 require 'fileutils'
 require 'csv'
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require_relative 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
-outfile = outdir + '773_field_group_tag.results.txt'
 
 delete_docid_file = outdir + 'ebc_subs_deletions.docid'
 delete_txt_file = outdir + 'ebc_subs_deletions.txt'
@@ -34,10 +33,10 @@ query = <<-SQL
     and v.field_content = '|tProQuest Ebook Central (online collection). NCLIVE subscription ebooks'
 SQL
 
-SierraDB.make_query(query)
+Sierra::DB.query(query)
 
 m001_bnum_map = {}
-m001s = SierraDB.results.entries.dup
+m001s = Sierra::DB.results.entries.dup
 m001s.each { |r| m001_bnum_map[r['field_content']] = r['bnum']}
 
 m001s.map! { |rec| rec['field_content'].gsub(/^EBC/, '').gsub(/sub$/, '')}

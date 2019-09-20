@@ -1,34 +1,34 @@
 #!/usr/bin/env ruby
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
-outfile = outdir + '856_bad_indicators_pt2.xlsx'
+outfile = outdir + '856_bad_indicators_pt2.csv'
 
-query = "#{__dir__}/856_bad_indicators_pt2.sql"
+query = File.read(File.join(__dir__, '856_bad_indicators_pt2.sql'))
 
-headers = ['bnum', 'bcode3', 'coll', 'marc_tag', 'ind1', 'ind2', 'link_type', 'field_content']
-SierraDB.make_query(query)
-SierraDB.write_results(outfile, format: 'xlsx')
+headers = %w[problem bnum coll title marc_ind1 marc_ind2
+             link_type m856 $3 $x $y $z $u fixed]
+Sierra::DB.query(query)
+Sierra::DB.write_results(outfile, headers: headers, format: 'csv')
 
-email_body = <<-EOL
-How-to:
-https://internal.lib.unc.edu/wikis/staff/index.php/MISC_856_maintenance_--_Check_for_links_with_indicator_problems#Second_report_and_individual_856_review
+email_body = <<~BODY
+  How-to:
+  https://internal.lib.unc.edu/wikis/staff/index.php/MISC_856_maintenance_--_Check_for_links_with_indicator_problems#Second_report_and_individual_856_review
 
-Maintenance project folder:
-"G:\\TechServ\\e-resources cataloging\\Cleanup\\856_indicators"
+  Maintenance project folder:
+  "G:\\TechServ\\e-resources cataloging\\Cleanup\\856_indicators"
 
-Stats:
-"G:\\TechServ\\ESM\\e-resources cataloging\\task_stats.xlsx"
-EOL
+  Stats:
+  "G:\\TechServ\\ESM\\e-resources cataloging\\task_stats.xlsx"
+BODY
 
-email_address = 'cisrael@email.unc.edu'
-cc_address = SierraDB.yield_email
+email_address = ['cisrael@email.unc.edu', Sierra::DB.yield_email]
+cc_address = Sierra::DB.yield_email
 
-SierraDB.mail_results(outfile,
-            mail_details = {:from => cc_address,
-                            :to => email_address,
-                            :cc => cc_address,
-                            :subject => 'Review 856s with indicator problems',
-                            :body => email_body},
-            remove_file: true
-)
+Sierra::DB.mail_results(outfile,
+                        {from: Sierra::DB.yield_email,
+                         to: email_address,
+                         cc: cc_address,
+                         subject: 'Review 856s with indicator problems',
+                         body: email_body},
+                        remove_file: false)

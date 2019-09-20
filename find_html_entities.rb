@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
 outfile = outdir + 'records_to_process.xlsx'
@@ -18,22 +18,18 @@ query = <<~SQL
     v.field_content ~ '&#?[a-z0-9]{2,25};'
 SQL
 
-SierraDB.make_query(query)
-headers = ['bnum', '_001', 'bcode3', 'marc_tag', 'field_content']
-SierraDB.write_results(
-  outfile,
-  headers: headers,
-  format: 'xlsx'
-)
+Sierra::DB.query(query)
+Sierra::DB.write_results(outfile, format: 'xlsx')
 
-email_body = 'Report attached. These are records containing (potential) html entities'
-email_address = SierraDB.yield_email
+email_body = 'Report attached. These are records containing '\
+             '(potential) html entities'
+email_address = Sierra::DB.yield_email
 
-SierraDB.mail_results(
+Sierra::DB.mail_results(
   outfile,
-  mail_details = {:from => email_address,
-                  :to => email_address,
-                  :subject => 'Report: html entity cleanup',
-                  :body => email_body},
+  {from: email_address,
+   to: email_address,
+   subject: 'Report: html entity cleanup',
+   body: email_body},
   remove_file: true
 )

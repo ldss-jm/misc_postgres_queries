@@ -1,35 +1,33 @@
 #!/usr/bin/env ruby
 require 'csv'
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
-outfile = outdir + 'YYYY-MM-DD_html_tags.xlsx'
+outfile = outdir + 'YYYY-MM-DD_html_tags.csv'
 
-
+TAG_PATTERNS = [
+  /<\/?[abipqu]>/,
+  /<\/?h[1-6]>/,
+  /<\/?div>/,
+  /<\/?br ?\/?>/,
+  /<\/?d[ltd]>/,
+  /<\/?em>/,
+  /<\/?font>/,
+  /<\/?l[hi]>/,
+  /<\/?[ou]l>/,
+  /<\/?pre>/,
+  /<\/?small>/,
+  /<\/?str[io][kn][eg]>/,
+  /<\/?su[bp]>/,
+  /<\/?t[dhrt]>/,
+  /<\/?body/,
+  /<\/?caption/,
+  /<\/?script/,
+  /<\/?span/,
+  /<\/?style/
+]
 def detect_html(content)
-  if (
-    content.match(/<\/?[abipqu]>/) or
-    content.match(/<\/?h[1-6]>/) or
-    content.match(/<\/?div>/) or
-    content.match(/<\/?br ?\/?>/) or
-    content.match(/<\/?d[ltd]>/) or
-    content.match(/<\/?em>/) or
-    content.match(/<\/?font>/) or
-    content.match(/<\/?l[hi]>/) or
-    content.match(/<\/?[ou]l>/) or
-    content.match(/<\/?pre>/) or
-    content.match(/<\/?small>/) or
-    content.match(/<\/?str[io][kn][eg]>/) or
-    content.match(/<\/?su[bp]>/) or
-    content.match(/<\/?t[dhrt]>/) or
-    content.match(/<\/?body/) or
-    content.match(/<\/?caption/) or
-    content.match(/<\/?script/) or
-    content.match(/<\/?span/) or
-    content.match(/<\/?style/)
-  )
-    return true
-  end
+  TAG_PATTERNS.each { |regexp| return true if content.match(regexp) }
 end
 
 query = <<~SQL
@@ -45,31 +43,16 @@ query = <<~SQL
     v.field_content ~ '<[/a-zA-Z]'
 SQL
 
-SierraDB.make_query(query)
+Sierra::DB.query(query)
 html_problems = []
-SierraDB.results.each do |record|
+Sierra::DB.results.each do |record|
   content = record['field_content'].downcase
-  if detect_html(content)
-    html_problems << record
-  end
+  html_problems << record if detect_html(content)
 end
 
 html_problems.sort_by! { |x| x.values }
-SierraDB.write_results(
+Sierra::DB.write_results(
   outfile,
   results: html_problems,
-  headers: ['bnum', '_001', 'marc_tag', 'field_content'],
   format: 'csv'
 )
-
-# get a list of all things resembling tags in results
-=begin
-tags = []
-results.each do |record|
-  content = record['field_content']
-  content.scan(/<[^ >]*/).each do |mtch|
-    tags << mtch
-  end
-end
-File.write('tags.txt', tags.sort.uniq.join("\n")
-=end

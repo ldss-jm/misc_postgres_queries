@@ -1,26 +1,29 @@
 #!/usr/bin/env ruby
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
-outfile = outdir + 'mono_bibs_unsupp_holdings_endeca_display_probs.xlsx'
+outfile = outdir + 'mono_bibs_unsupp_holdings_endeca_display_probs.csv'
 
 
 headers = ['bnum', 'cnum', 'problem_location', 'url']
-SierraDB.make_query('mono_bibs_unsupp_holdings_endeca_display_probs.sql')
-SierraDB.write_results(
+
+query = File.read(File.join(__dir__, 'mono_bibs_unsupp_holdings_endeca_display_probs.sql'))
+
+Sierra::DB.query(query)
+Sierra::DB.write_results(
   outfile,
   headers: headers,
-  format: 'xlsx'
+  format: 'csv'
 )
 
-email_body = <<~EOL
+email_body = <<~BODY
   Report attached. These holdings records are unsuppressed and
   have no items attached. They are attached to bibs that display holdings in
   Endeca. This causes display problems.
-EOL
-email_address = SierraDB.yield_email
+  BODY
+email_address = Sierra::DB.yield_email
 
-SierraDB.mail_results(
+Sierra::DB.mail_results(
   outfile,
   mail_details = {:from => email_address,
                   :to => email_address,

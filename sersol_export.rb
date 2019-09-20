@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
-require_relative '../sierra-postgres-utilities/lib/sierra_postgres_utilities.rb'
+require 'sierra_postgres_utilities'
 
-outdir = '//ad.unc.edu/lib/departments/TechServ/ESM/e-resources cataloging/SerialsSolutions ebook MARC processing/data/'
+outdir = '//ad.unc.edu/lib/departments/TechServ/ESM/e-resources cataloging/'\
+         'SerialsSolutions ebook MARC processing/data/'
 outfile = outdir + 'mill_data.txt'
 
 query = <<~SQL
@@ -18,9 +19,5 @@ query = <<~SQL
   where (ph.index_tag || ph.index_entry) ~ '^oss(e|eb)[0-9]+$'
 SQL
 
-SierraDB.make_query(query)
-SierraDB.write_results(
-  outfile,
-  format: 'tsv',
-  include_headers: true
-)
+Sierra::DB.query(query)
+Sierra::DB.write_results(outfile, format: 'tsv', include_headers: true)
