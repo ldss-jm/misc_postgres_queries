@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/UNC-Libraries/sierra-postgres-utilities.git
+  remote: https://github.com/UNC-Libraries/sierra-postgres-utilities.git
   revision: b4f5b903ffddb36da505b23e5b16453049adc9c6
   specs:
     sierra_postgres_utilities (0.3.3)
@@ -35,4 +35,4 @@ DEPENDENCIES
   sierra_postgres_utilities!
 
 BUNDLED WITH
-   1.16.0
+   2.0.2

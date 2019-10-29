@@ -28,6 +28,7 @@ TAG_PATTERNS = [
 ]
 def detect_html(content)
   TAG_PATTERNS.each { |regexp| return true if content.match(regexp) }
+  nil
 end
 
 query = <<~SQL
@@ -46,7 +47,7 @@ SQL
 Sierra::DB.query(query)
 html_problems = []
 Sierra::DB.results.each do |record|
-  content = record['field_content'].downcase
+  content = record[:field_content].downcase
   html_problems << record if detect_html(content)
 end
 
