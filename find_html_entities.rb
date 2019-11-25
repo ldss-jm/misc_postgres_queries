@@ -2,7 +2,7 @@
 require 'sierra_postgres_utilities'
 
 outdir = "#{__dir__}/output/"
-outfile = outdir + 'records_to_process.xlsx'
+outfile = outdir + 'records_to_process.csv'
 
 query = <<~SQL
   SELECT 'b' || rm.record_num || 'a' as bnum, v001.field_content as _001, b.bcode3,
@@ -19,7 +19,7 @@ query = <<~SQL
 SQL
 
 Sierra::DB.query(query)
-Sierra::DB.write_results(outfile, format: 'xlsx')
+Sierra::DB.write_results(outfile, format: 'csv')
 
 email_body = 'Report attached. These are records containing '\
              '(potential) html entities'

@@ -13,6 +13,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     concurrent-ruby (1.1.5)
+    docopt (0.6.1)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     mail (2.7.1)
@@ -32,6 +33,7 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
+  docopt (~> 0.6.1)
   sierra_postgres_utilities!
 
 BUNDLED WITH
