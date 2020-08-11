@@ -10,13 +10,13 @@ brp.best_title as title,
 --v.marc_tag,
 v.marc_ind1 as ind1, v.marc_ind2 as ind2,
 case
-when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|uhttp' or v.field_content ~ '\|u//'
+when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|u *http' or v.field_content ~ '\|u//'
    then 'html'
-when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|uftp'
+when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|u *ftp'
    then 'ftp'
-when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|utelnet'
+when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|u *telnet'
    then 'telnet'
-when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|umailto'
+when replace(v.field_content, 'http://libproxy.lib.unc.edu/login?url=', '') ~ '\|u *mailto'
    then 'email'
 else null
 end as link_type,
