@@ -54,5 +54,5 @@ unless notfounds.empty?
 end
 unless multiple_matches.empty?
   puts 'Each of these 001s had multiple matches:'
-  puts notfounds.join("\n")
+  puts multiple_matches.join("\n")
 end
