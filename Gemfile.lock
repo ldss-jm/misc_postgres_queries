@@ -9,31 +9,83 @@ GIT
       pg (~> 1.1)
       sequel (~> 5.20.0)
 
+GIT
+  remote: https://github.com/trln/marc-to-argot.git
+  revision: 7993d70355ea09a6a2ffa6987e93dff6be3de5b1
+  specs:
+    marc_to_argot (0.4.55)
+      activesupport (~> 5.2)
+      lcsort (~> 0.9.0)
+      library_stdnums (~> 1.6)
+      logging (~> 2.2.2)
+      nokogiri (~> 1.8)
+      thor (~> 0.20.0)
+      traject (~> 2.0)
+      yajl-ruby (>= 1.3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (5.2.4.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
     concurrent-ruby (1.1.5)
     docopt (0.6.1)
+    dot-properties (0.1.3)
+    hashie (3.6.0)
+    httpclient (2.8.3)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
+    lcsort (0.9.1)
+    library_stdnums (1.6.0)
+    little-plugger (1.1.4)
+    logging (2.2.2)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.10)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marc (1.0.4)
       scrub_rb (>= 1.0.1, < 2)
       unf
+    marc-fastxmlwriter (1.0.0)
+      marc (~> 1.0)
     mini_mime (1.0.2)
+    mini_portile2 (2.4.0)
+    minitest (5.14.1)
+    multi_json (1.15.0)
+    nokogiri (1.10.10-x64-mingw32)
+      mini_portile2 (~> 2.4.0)
     pg (1.1.4-x64-mingw32)
     scrub_rb (1.0.1)
     sequel (5.20.0)
+    slop (3.6.0)
+    thor (0.20.3)
+    thread_safe (0.3.6)
+    traject (2.3.4)
+      concurrent-ruby (>= 0.8.0)
+      dot-properties (>= 0.1.1)
+      hashie (~> 3.1)
+      httpclient (~> 2.5)
+      marc (~> 1.0)
+      marc-fastxmlwriter (~> 1.0)
+      slop (>= 3.4.5, < 4.0)
+      yell
+    tzinfo (1.2.7)
+      thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
+    yajl-ruby (1.4.1)
+    yell (2.2.2)
 
 PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
   docopt (~> 0.6.1)
+  marc_to_argot!
   sierra_postgres_utilities!
 
 BUNDLED WITH
