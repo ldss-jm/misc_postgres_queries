@@ -52,12 +52,12 @@ GEM
     marc-fastxmlwriter (1.0.0)
       marc (~> 1.0)
     mini_mime (1.0.2)
-    mini_portile2 (2.4.0)
     minitest (5.14.1)
     multi_json (1.15.0)
-    nokogiri (1.10.10-x64-mingw32)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.11.5-x64-mingw32)
+      racc (~> 1.4)
     pg (1.1.4-x64-mingw32)
+    racc (1.5.2)
     scrub_rb (1.0.1)
     sequel (5.20.0)
     slop (3.6.0)
@@ -89,4 +89,4 @@ DEPENDENCIES
   sierra_postgres_utilities!
 
 BUNDLED WITH
-   2.0.2
+   2.2.17
