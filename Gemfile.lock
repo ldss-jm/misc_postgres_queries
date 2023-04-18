@@ -52,10 +52,13 @@ GEM
     marc-fastxmlwriter (1.0.0)
       marc (~> 1.0)
     mini_mime (1.0.2)
+    mini_portile2 (2.5.3)
     minitest (5.14.1)
     multi_json (1.15.0)
-    nokogiri (1.11.5-x64-mingw32)
+    nokogiri (1.11.5)
+      mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
+    pg (1.1.4)
     pg (1.1.4-x64-mingw32)
     racc (1.5.2)
     scrub_rb (1.0.1)
@@ -77,11 +80,12 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    yajl-ruby (1.4.1)
+    yajl-ruby (1.4.3)
     yell (2.2.2)
 
 PLATFORMS
   x64-mingw32
+  x86_64-linux
 
 DEPENDENCIES
   docopt (~> 0.6.1)
