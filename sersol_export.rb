@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'sierra_postgres_utilities'
 
-outdir = '//ad.unc.edu/lib/departments/TechServ/ESM/e-resources cataloging/'\
+outdir = '//ad.unc.edu/lib/libraries/techserv/EresCat/'\
          'SerialsSolutions ebook MARC processing/data/'
 outfile = outdir + 'mill_data.txt'
 
