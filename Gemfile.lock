@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/UNC-Libraries/sierra-postgres-utilities.git
-  revision: 54e6d1b7fcb18b7b47a5ed2bf9083340582361f2
+  revision: b17f2865e04a13b2ba576b42f967005882b03555
   specs:
-    sierra_postgres_utilities (0.3.6.1)
+    sierra_postgres_utilities (0.3.7)
       i18n (~> 1.6.0)
       mail (~> 2.6)
       marc (~> 1.2.0)
@@ -50,6 +50,9 @@ GEM
     multi_json (1.15.0)
     nokogiri (1.11.5-x64-mingw32)
       racc (~> 1.4)
+    nokogiri (1.11.5-x86_64-darwin)
+      racc (~> 1.4)
+    pg (1.5.4)
     pg (1.5.4-x64-mingw32)
     racc (1.5.2)
     rexml (3.2.6)
@@ -74,6 +77,7 @@ GEM
 
 PLATFORMS
   x64-mingw32
+  x86_64-darwin-21
 
 DEPENDENCIES
   docopt (~> 0.6.1)
@@ -81,4 +85,4 @@ DEPENDENCIES
   sierra_postgres_utilities!
 
 BUNDLED WITH
-   2.2.33
+   2.5.2
