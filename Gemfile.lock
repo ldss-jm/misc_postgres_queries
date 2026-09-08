@@ -72,9 +72,12 @@ GEM
     nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    nokogiri (1.19.4-x64-mingw-ucrt)
+      racc (~> 1.4)
     nokogiri (1.19.4-x86_64-darwin)
       racc (~> 1.4)
     pg (1.5.4)
+    pg (1.5.4-x64-mingw-ucrt)
     pg (1.5.4-x64-mingw32)
     racc (1.5.2)
     rexml (3.4.4)
@@ -100,8 +103,8 @@ GEM
 
 PLATFORMS
   ruby
-  x64-mingw32
   x64-mingw-ucrt
+  x64-mingw32
   x86_64-darwin-21
   x86_64-darwin-23
 
