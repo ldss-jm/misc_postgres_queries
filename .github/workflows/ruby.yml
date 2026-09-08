@@ -37,10 +37,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.3'
-    - name: Install dependencies
-      run: |
-        bundle config set frozen false
-        bundle install
+        bundler-cache: true
     - name: Install bundler-audit
       run: gem install bundler-audit --no-document
     - name: Audit dependencies
